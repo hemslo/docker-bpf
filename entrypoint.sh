@@ -4,7 +4,9 @@ set -eu
 
 cd "$(dirname "$0")"
 
-BPF_IMAGE="${BPF_IMAGE:-"bpftrace:latest"}"
+BPF_IMAGE="${BPF_IMAGE:-"docker-bpf-env:latest"}"
+DATA_MOUNT="${DATA_MOUNT:-"/tmp/docker-bpf-env:/tmp/docker-bpf-env"}"
+
 KERNEL_HEADERS="/usr/src"
 OS_RELEASE=$(docker run --rm -it alpine:3.16.2 uname -r)
 
@@ -25,8 +27,8 @@ build_linuxkit_headers() {
 
 docker volume create --driver local --opt type=debugfs --opt device=debugfs debugfs
 
-if [ "$BPF_IMAGE" = "bpftrace:latest" ]; then
-  docker build -t bpftrace:latest ./bpftrace
+if [ "$BPF_IMAGE" = "docker-bpf-env:latest" ]; then
+  docker build -t docker-bpf-env:latest ./docker-bpf-env
 fi
 
 case $OS_RELEASE in
@@ -38,6 +40,7 @@ docker run -ti --rm \
   -v /lib/modules/:/lib/modules:ro \
   -v /sys/kernel:/sys/kernel:ro \
   -v debugfs:/sys/kernel/debug:ro \
+  -v "$DATA_MOUNT" \
   --net=host \
   --pid=host \
   --privileged \
