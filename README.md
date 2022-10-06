@@ -5,6 +5,8 @@
 It will automatically mount linuxkit kernel headers, BTF and debugfs into the container.
 So you can run BPF programs in Docker Desktop for Mac/Windows(WSL), and Linux of course.
 
+Details can be found in [this blog post](https://hemslo.io/run-ebpf-programs-in-docker-using-docker-bpf/).
+
 ## Usage
 
 ### Default
